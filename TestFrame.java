@@ -2,8 +2,12 @@ package com.company;
 
 
 import com.company.elementsOfGraph.Node;
+import javafx.scene.paint.*;
 
 import javax.swing.*;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -65,20 +69,53 @@ public class TestFrame {
     JLabel jl;
     ArrayList<Node> arrayOfNodes;
     public TestFrame() {
-        Frame frame= new Frame("Test frame");
+        JFrame frame= new JFrame("Test frame");
         arrayOfNodes=new ArrayList<Node>();
         imag = new BufferedImage(2200, 2000, BufferedImage.TYPE_INT_RGB);
-        //// рисуем!!
-        imag.setRGB(255,25,200);
-        // Ложим рисунок на JLabel, а ее - на JScrollPane
         jl = new JLabel(new ImageIcon(imag));
+       // jl.setBounds(30,30,100,80);
+        jl.setBackground(Color.white);
+        jl.setOpaque(true);
         jl.addMouseListener(new CustomListener());
         JScrollPane jsp = new JScrollPane(jl);
-        // создаем фрейм, ложим в центр созданный JScrollPane
-   //     JFrame jf = new JFrame("JScroll Window");
-        frame.setSize(800, 600);
-        frame.add(jsp);
+        frame.setSize(1000, 800);
+        jsp.setPreferredSize(new Dimension(1550, 0));
+        jsp.setBounds(30,30,500,500);
+        frame.add(jsp, BorderLayout.EAST);
+        JMenuBar menuBar = new  JMenuBar();
+        frame.setJMenuBar(menuBar);
+      //  menuBar.setBounds(0,0,30,30);
+        JMenu fileMenu = new  JMenu("Файл");
+        menuBar.add(fileMenu);
+        fileMenu.add(new JMenuItem(new AbstractAction("Загрузить") {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+            }
+        }));
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+
+        JToolBar toolbar = new  JToolBar("Toolbar", JToolBar.VERTICAL);
+
+        JButton arrowButton = new  JButton(new  ImageIcon("E:\\GraphEditor\\src\\com\\company\\resourses\\arrowNonActive.png"));
+        arrowButton.addActionListener(new  ActionListener()
+        {
+            public void actionPerformed(ActionEvent event)
+            {
+            }
+        });
+        toolbar.add(arrowButton);
+        JButton edgeButton = new  JButton(new  ImageIcon("E:\\GraphEditor\\src\\com\\company\\resourses\\edge.png"));
+        edgeButton.addActionListener(new  ActionListener()
+        {
+            public void actionPerformed(ActionEvent event)
+            {
+            }
+        });
+        toolbar.add(edgeButton);
+        toolbar.setBounds(50, 50, 300, 300);
+        frame.add(toolbar);
     }
 
 
@@ -86,7 +123,7 @@ public class TestFrame {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
               //  JFrame.setDefaultLookAndFeelDecorated(true);
-                TestFrame frame = new TestFrame();
+                new TestFrame();
               //  frame.setPreferredSize(new Dimension(2000, 2000));
                // frame.pack();
                // frame.setLocationRelativeTo(null);
