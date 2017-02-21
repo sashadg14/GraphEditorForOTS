@@ -17,14 +17,14 @@ public class TestFrame {
     BufferedImage imag;
     JLabel jl;
     ArrayList<Node> arrayOfNodes;
+    Controller controller;
+
     public TestFrame() {
+        controller = new Controller(this);
         JFrame frame = new JFrame("KBE: second edition");
         arrayOfNodes = new ArrayList<Node>();
         imag = new BufferedImage(2200, 2000, BufferedImage.TYPE_INT_RGB);
         jl = new JLabel(new ImageIcon(imag));
-        // jl.setBounds(30,30,100,80);
-        jl.setBackground(Color.white);
-        jl.setOpaque(true);
         jl.addMouseListener(new CustomListener());
         jl.addMouseMotionListener(new MyMouseMotionListener());
         JScrollPane jsp = new JScrollPane(jl);
@@ -34,7 +34,6 @@ public class TestFrame {
         frame.add(jsp, BorderLayout.EAST);
         JMenuBar menuBar = new JMenuBar();
         frame.setJMenuBar(menuBar);
-        //  menuBar.setBounds(0,0,30,30);
         JMenu fileMenu = new JMenu("Файл");
         menuBar.add(fileMenu);
         fileMenu.add(new JMenuItem(new AbstractAction("Загрузить") {
@@ -69,38 +68,51 @@ public class TestFrame {
 
 
 
-    public class CustomListener implements MouseListener {
-
-        Graphics g = imag.getGraphics();
-        Graphics2D g2 = (Graphics2D)g;
-
-        public void mouseClicked(MouseEvent e) {
-            g2.setColor(Color.WHITE);
-            g2.fillRect(0,0,1600,900);
-            if(e.getClickCount()==2)
-            arrayOfNodes.add(new Node(e.getX()-15,e.getY()-15));
-            for (Node node: arrayOfNodes){
-                if(node.isOverlapWithCursor(e.getX(),e.getY()))
-                    node.setActive(true);
-               else
-                    node.setActive(false);
-                node.render(g2);
+    public static void main(String[] args) {
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new TestFrame();
             }
-            g.setColor(Color.red);
-            g.fillPolygon(new int [] {0, 0, 50}, new int [] {0, 50, 0}, 3);
-            jl.updateUI();
+        });
+    }
 
+    public void setArrayOfNodes(ArrayList<Node> arrayOfNodes) {
+        this.arrayOfNodes = arrayOfNodes;
+    }
 
+    private  void renderAllElements(Graphics2D graphics2D)
+    {   graphics2D.setColor(Color.WHITE);
+        graphics2D.fillRect(0,0,imag.getWidth(),imag.getHeight());
+        for (Node node: arrayOfNodes){
+            node.render(graphics2D);
+        }
+        jl.updateUI();
+    }
+
+    public class CustomListener implements MouseListener {
+        Graphics2D g2 = (Graphics2D) imag.getGraphics();
+        public void mouseClicked(MouseEvent e) {
+        if(e.getButton()==1)
+        {
+            if(e.getClickCount()==2)
+            controller.addNode(e.getX(),e.getY());
+            controller.ifActivateNode(e.getX(),e.getY());
+        }
+            renderAllElements(g2);
         }
 
         @Override
         public void mousePressed(MouseEvent mouseEvent) {
-
+            controller.ifActivateNode(mouseEvent.getX(),mouseEvent.getY());
+            controller.setMovingNode(mouseEvent.getX(),mouseEvent.getY());
+            renderAllElements(g2);
+            System.out.println("sdfdsafdsadafsf");
         }
 
         @Override
         public void mouseReleased(MouseEvent mouseEvent) {
-
+                if(controller.isHaveMovingNode())
+                    controller.deleteMovingNode();
         }
 
         @Override
@@ -120,20 +132,16 @@ public class TestFrame {
 
         @Override
         public void mouseDragged(MouseEvent mouseEvent) {
-
+            if(controller.isHaveMovingNode())
+                controller.moveNode(mouseEvent.getX(),mouseEvent.getY());
+            renderAllElements(g2);
         }
 
         @Override
         public void mouseMoved(MouseEvent mouseEvent) {
-            for (Node node: arrayOfNodes){
-                if((node.isOverlapWithCursor(mouseEvent.getX(),mouseEvent.getY()))&&(node.isActive()!=true))
-                    node.setEntered(true);
-                else
-                    if(!node.isActive())
-                    node.setEntered(false);
-                node.render(g2);
-            }
-            jl.updateUI();
+            controller.ifEnteredNode(mouseEvent.getX(),mouseEvent.getY());
+
+            renderAllElements(g2);
         }
     }
 

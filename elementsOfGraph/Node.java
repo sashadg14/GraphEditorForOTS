@@ -16,6 +16,7 @@ public class Node {
     private Color colorOfNode;
     private boolean isActive=false;
     private boolean isEntered=false;
+
     public Node(int centerX,int centerY)
     {   colorOfNode=Color.BLACK;
         this.centerX=centerX;
