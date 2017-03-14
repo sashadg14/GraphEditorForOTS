@@ -38,7 +38,7 @@ public class FileManipulations
             fileWriter.write("</GRAPH>");
             fileWriter.close();
         } catch (IOException e) {
-            JOptionPane.showInputDialog ("косяк, мля");
+            JOptionPane.showInputDialog ("песец файлику");
         }
 
 

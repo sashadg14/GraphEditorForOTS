@@ -138,4 +138,11 @@ public class Controller
         }
     }
 
+    public void ifEnterEdge(int posX,int posY)
+    {
+        for(Edge edge: arrayOfEdges)
+        {
+            edge.isEntered(posX,posY);
+        }
+    }
 }

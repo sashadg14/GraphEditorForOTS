@@ -11,13 +11,10 @@ import static com.sun.java.accessibility.util.AWTEventMonitor.addMouseListener;
 import static com.sun.java.accessibility.util.AWTEventMonitor.addMouseMotionListener;
 
 public class Main{
-    public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                //new Controller();
-            }
-        });
-    }
+    public  static void main(String args[])
+    {
 
+        new TestFrame();
+    }
 }
 
