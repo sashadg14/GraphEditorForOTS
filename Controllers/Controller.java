@@ -1,48 +1,49 @@
 package com.company.Controllers;
 
+import com.company.MyRunnable;
 import com.company.TestFrame;
 import com.company.elementsOfGraph.Edge;
+import com.company.elementsOfGraph.Graph;
 import com.company.elementsOfGraph.Node;
 
-import java.awt.*;
-import java.util.ArrayList;
 import java.util.Iterator;
+
+import static javax.swing.SwingUtilities.invokeLater;
 
 /**
  * Created by alex on 21.02.2017.
  */
 public class Controller
 {  private TestFrame testFrame;
-    private ArrayList<Node> arrayOfNodes;
-    private ArrayList<Edge> arrayOfEdges;
     private Node isMovingNode;
+    private Graph graph;
     private boolean isHaveMovingNode=false;
     private Node[] masOfConnectingNodes;
     private int countOfConectingNodes=0;
-
+    private FileManipulations fileManipulations;
     public Controller(TestFrame testFrame)
     {   isMovingNode=null;
+
         this.testFrame=testFrame;
-        arrayOfNodes=new ArrayList<Node>();
-        arrayOfEdges=new ArrayList<Edge>();
-        masOfConnectingNodes=new Node[2];
+        graph=new Graph(testFrame);
+        fileManipulations=new FileManipulations(this);
+            masOfConnectingNodes=new Node[2];
     }
 
     public void addNode(int nodeX, int nodeY)
     {
-        arrayOfNodes.add(new Node(nodeX-15,nodeY-15));
-        testFrame.setArrayOfNodes(arrayOfNodes);
+        graph.addNode(new Node(nodeX-15,nodeY-15));
+        testFrame.setGraph(graph);
     }
     private void addEdge(Node node1, Node node2)
     {
-        arrayOfEdges.add(new Edge(node1,node2));
-        testFrame.setArrayOfEdges(arrayOfEdges);
-        testFrame.setArrayOfEdges(arrayOfEdges);
+        graph.addEdge(new Edge(node1,node2));
+        testFrame.setGraph(graph);
     }
 
     public void ifActivateNode(int posX, int posY)
     {
-        for(Node node: arrayOfNodes)
+        for(Node node: graph.getNodeList())
         {
             if(node.isOverlapWithCursor(posX,posY))
             node.setActive(true);
@@ -52,19 +53,19 @@ public class Controller
     }
     public void setIdtfForActiveNode(String idtf)
     {
-        for(Node node: arrayOfNodes)
+        for(Node node: graph.getNodeList())
         {   if(node.isActive())
+            if(idtf!=null)
             node.setIdentificator(idtf);
         }
-
     }
     public void deleteActiveNode()
     {
-        Iterator<Node> nodeIterator=arrayOfNodes.iterator();
+        Iterator<Node> nodeIterator=graph.getNodeList().iterator();
         while (nodeIterator.hasNext())
         {   Node node = nodeIterator.next();
             if(node.isActive()) {
-            Iterator<Edge> edgeIterator=arrayOfEdges.iterator();
+            Iterator<Edge> edgeIterator=graph.getEdgeList().iterator();
             while (edgeIterator.hasNext())
             {Edge edge=edgeIterator.next();
                 if( (node==edge.getFirstNode())||node==edge.getSecondNode())  {
@@ -74,14 +75,22 @@ public class Controller
             nodeIterator.remove();
         }
         }
-        testFrame.setArrayOfEdges(arrayOfEdges);
-        testFrame.setArrayOfNodes(arrayOfNodes);
+        testFrame.setGraph(graph);
+    }
 
+    public void deleteEnteredEdge()
+    {
+        Iterator<Edge> edgeIterator=graph.getEdgeList().iterator();
+        while (edgeIterator.hasNext())
+        {
+                if(edgeIterator.next().isActive())
+                edgeIterator.remove();
+        }
     }
 
     public void setMovingNode(int posX, int posY)
     {
-        for(Node node: arrayOfNodes)
+        for(Node node: graph.getNodeList())
         {
             if(node.isOverlapWithCursor(posX,posY))
             {
@@ -100,7 +109,7 @@ public class Controller
     public void moveNode(int posX, int posY)
     {
 
-    for (Node node: arrayOfNodes)
+    for (Node node: graph.getNodeList())
     {
         if (node==isMovingNode)
             {
@@ -111,7 +120,7 @@ public class Controller
     }
 
     public void addNodeForConnection(Node node)
-    {   System.out.println("sddsfaads");
+    { //  System.out.println("sddsfaads");
         masOfConnectingNodes[countOfConectingNodes]=node;
         countOfConectingNodes++;
         if(countOfConectingNodes==2)
@@ -129,7 +138,7 @@ public class Controller
 
     public void ifEnteredNode(int posX, int posY)
     {
-        for (Node node: arrayOfNodes){
+        for (Node node: graph.getNodeList()){
             if((node.isOverlapWithCursor(posX,posY))&&(node.isActive()!=true))
                 node.setEntered(true);
             else
@@ -140,9 +149,57 @@ public class Controller
 
     public void ifEnterEdge(int posX,int posY)
     {
-        for(Edge edge: arrayOfEdges)
+        for(Edge edge: graph.getEdgeList())
         {
-            edge.isEntered(posX,posY);
+            edge.setEntered(posX,posY);
         }
+    }
+
+    public boolean haveActiveNode()
+    {
+        for (Node node: graph.getNodeList())
+            if(node.isActive())
+                return true;
+        return false;
+    }
+
+    public boolean haveActiveEdge()
+    {
+        for (Edge edge:graph.getEdgeList())
+        {
+            if(edge.isActive())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public void setWeigth(String string)
+    {
+        for (Edge edge:graph.getEdgeList())
+        {
+            if(edge.isActive())
+            {   if(string!=null)
+                edge.setWeigth(string);
+                return;
+            }
+        }
+    }
+
+    public void SaveGraphInFile()
+    {
+        fileManipulations.SaveGraph(graph);
+    }
+
+    public void loadGraphFromFile()
+    {   graph.deleteOllElements();
+        fileManipulations.loadGraph(graph);
+    }
+
+    public void doTask()
+    {
+        invokeLater(new MyRunnable(graph));
     }
 }

@@ -11,26 +11,32 @@ import static java.lang.Math.sqrt;
  * Created by alex on 19.02.2017.
  */
 public class Node {
-    static int coll=0;
     private int centerX;
     private int centerY;
     private Color colorOfNode;
     private boolean isActive=false;
     private boolean isEntered=false;
     private long id;
+    private String identificator="";
+
     public String getIdentificator() {
         return identificator;
     }
-
-    private String identificator="";
-
     public Node(int centerX,int centerY)
     {   colorOfNode=Color.BLACK;
         this.centerX=centerX;
         this.centerY=centerY;
         id= (long)(Math.random()*100000000);
-        coll++;
     }
+
+    public Node(String identificator, long id,int centerX,int centerY)
+    {   colorOfNode=Color.BLACK;
+        this.centerX=centerX;
+        this.centerY=centerY;
+        this.id=id;
+        this.identificator=identificator;
+    }
+
     public int getCenterX() {
         return centerX;
     }
@@ -77,7 +83,7 @@ public class Node {
         this.identificator = identificator;
     }
 
-    public void render(Graphics2D graphics2D)
+    void render(Graphics2D graphics2D)
     {   graphics2D.setColor(colorOfNode);
         graphics2D.fillOval(centerX, centerY, 30, 30);
         graphics2D.setColor(Color.WHITE);
@@ -89,8 +95,6 @@ public class Node {
     }
     public boolean isOverlapWithCursor(int posX, int posY)
     {  // System.out.println("     "+coll);
-        if(sqrt((posX-centerX)*(posX-centerX)+(posY-centerY)*(posY-centerY))<30)
-             return true;
-        else return false;
+        return sqrt((posX - centerX) * (posX - centerX) + (posY - centerY) * (posY - centerY)) < 30;
     }
 }

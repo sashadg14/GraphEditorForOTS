@@ -11,12 +11,29 @@ import java.util.ArrayList;
 public class Edge {
     private Node firstNode;
     private Node secondNode;
-    Rectangle2D rectangle;
-    Color color;
+    private Color color;
+    private boolean isActive=false;
+    private String weigth="";
     public Edge(Node node1,Node node2)
     {   this.firstNode =node1;
         this.secondNode =node2;
         color=Color.gray;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public String getWeigth() {
+        return weigth;
+    }
+
+    public void setWeigth(String weigth) {
+        this.weigth = weigth;
     }
 
     public void setFirstNode(Node firstNode) {
@@ -40,33 +57,40 @@ public class Edge {
         graphics2D.setColor(color);
         graphics2D.setStroke(new BasicStroke(10));
         graphics2D.drawLine(firstNode.getCenterX()+15, firstNode.getCenterY()+15, secondNode.getCenterX()+15, secondNode.getCenterY()+15);
-      //  graphics2D.fillPolygon(new int [] {firstNodePositionX, firstNodePositionX-10, secondNodePositionX,secondNodePositionX+10},
-      //          new int [] {firstNodePositionY, firstNodePositionY+10, secondNodePositionY,secondNodePositionY-10}, 4);
-    }
+        graphics2D.setColor(Color.blue);
+        graphics2D.setFont( new Font("TimesRoman", Font.ITALIC+Font.BOLD,   20));
+        graphics2D.drawString(weigth, (firstNode.getCenterX()+30+secondNode.getCenterX()+30)/2,
+                (firstNode.getCenterY()+30+secondNode.getCenterY()+30)/2);
 
-    public void isEntered(int posX, int posY)
+        //  graphics2D.fillPolygon(new int [] {firstNodePositionX, firstNodePositionX-10, secondNodePositionX,secondNodePositionX+10},
+      //          new int [] {firstNodePositionY, firstNodePositionY+10, secondNodePositionY,secondNodePositionY-10}, 4);
+
+    }
+    private boolean isEdgeHaveActiveNode()
     {
-         //       double H  = Math.pow((firstNode.getCenterX()+15-posX)*(firstNode.getCenterX()+15-posX) + (firstNode.getCenterY()+15-posY)*(firstNode.getCenterY()+15-posY),0.5)+
-        //        Math.pow((posX-secondNode.getCenterX()+15)*(posX-secondNode.getCenterX()+15) + (posY-secondNode.getCenterY()+15)*(posY-secondNode.getCenterY()+15),0.5) -
-        //        Math.pow((firstNode.getCenterX()-secondNode.getCenterX())*(firstNode.getCenterX()-secondNode.getCenterX()) + (firstNode.getCenterY()-secondNode.getCenterY())*(firstNode.getCenterY()-secondNode.getCenterY()),0.5);
-       /* double A= Math.pow((firstNode.getCenterX()+15-posX)*(firstNode.getCenterX()+15-posX) + (firstNode.getCenterY()+15-posY)*(firstNode.getCenterY()+15-posY),0.5);
-        double B=Math.pow((posX-secondNode.getCenterX()+15)*(posX-secondNode.getCenterX()+15) + (posY-secondNode.getCenterY()+15)*(posY-secondNode.getCenterY()+15),0.5);
-        double C= Math.pow((firstNode.getCenterX()-secondNode.getCenterX())*(firstNode.getCenterX()-secondNode.getCenterX()) + (firstNode.getCenterY()-secondNode.getCenterY())*(firstNode.getCenterY()-secondNode.getCenterY()),0.5);
-        double poluPer=(A+B+C)/2;
-        double H=Math.pow(Math.abs(poluPer*(poluPer-A)*(poluPer-B)*(poluPer-C)),0.5)*2/C;*/
-        double H=-1;
+        return (firstNode.isEntered() || secondNode.isEntered());
+    }
+    public void setEntered(int posX, int posY)
+    {   //System.out.println(firstNode.getCenterX()+" "+secondNode.getCenterX()+" "+posX);
+        double H;
+        color=Color.gray;
+        isActive=false;
       // if(((firstNode.getCenterX()-posX)<-15&(firstNode.getCenterY()-posY)<-15)||((posX-secondNode.getCenterX())<-15&(posY-secondNode.getCenterY())<-15))
+        if(((posX<firstNode.getCenterX()+15&posX>secondNode.getCenterX()+15)||(posX<secondNode.getCenterX()+15&posX>firstNode.getCenterX()+15))&!isEdgeHaveActiveNode())
        {
            H = (((firstNode.getCenterY() - secondNode.getCenterY()) * posX + (secondNode.getCenterX() - firstNode.getCenterX()) * posY +
                    (firstNode.getCenterX() * secondNode.getCenterY() - secondNode.getCenterX() * firstNode.getCenterY())) /
                    Math.pow((secondNode.getCenterX() - firstNode.getCenterX()) * (secondNode.getCenterX() - firstNode.getCenterX()) +
                            (secondNode.getCenterY() - firstNode.getCenterY()) * (secondNode.getCenterY() - firstNode.getCenterY()), 0.5));
-       }
+
        if(Math.abs(H)<15)
-                    color=Color.orange;
-                else color=Color.gray;
-                //System.out.println("A="+A+"B="+B+"C="+C+" H===="+H);
-                System.out.println(" H===="+H);
+       {
+        color=Color.orange;
+        isActive=true;
+       }
+               // else color=Color.gray;
+              //  System.out.println(" H===="+H);
+    }
 
     }
 }

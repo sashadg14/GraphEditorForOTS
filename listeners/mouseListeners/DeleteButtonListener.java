@@ -1,50 +1,44 @@
-package com.company.listeners;
+package com.company.listeners.mouseListeners;
 
 import com.company.Controllers.Controller;
 import com.company.TestFrame;
 import com.company.elementsOfGraph.Node;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 /**
- * Created by alex on 13.03.2017.
+ * Created by alex on 15.03.2017.
  */
-public class EdgeListener implements MouseListener {
+public class DeleteButtonListener implements MouseListener {
     TestFrame testFrame;
     Controller controller;
-    public EdgeListener(TestFrame testFrame, Controller controller)
+    public DeleteButtonListener(TestFrame testFrame, Controller controller)
     {
         this.testFrame=testFrame;
         this.controller=controller;
     }
-    public void mouseClicked(MouseEvent e) {
 
-        {
-            for(Node node:testFrame.getArrayOfNodes())
-            {
-                if(node.isEntered())
-                    controller.addNodeForConnection(node);
-            }
+    public void mouseClicked(MouseEvent e) {
+    //    if(e.getButton()==1)
+        {   controller.ifActivateNode(e.getX(),e.getY());
+            controller.deleteActiveNode();
+            controller.deleteEnteredEdge();
+            testFrame.renderAllElements();
         }
-        testFrame.renderAllElements();
+
     }
 
     @Override
     public void mousePressed(MouseEvent mouseEvent) {
-
     }
 
     @Override
     public void mouseReleased(MouseEvent mouseEvent) {
-            if(controller.isHaveMovingNode())
-                controller.deleteMovingNode();
     }
-
     @Override
     public void mouseEntered(MouseEvent mouseEvent) {
 

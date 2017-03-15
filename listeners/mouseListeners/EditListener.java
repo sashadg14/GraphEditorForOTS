@@ -1,4 +1,4 @@
-package com.company.listeners;
+package com.company.listeners.mouseListeners;
 
 import com.company.Controllers.Controller;
 import com.company.TestFrame;

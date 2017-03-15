@@ -13,7 +13,6 @@ import static com.sun.java.accessibility.util.AWTEventMonitor.addMouseMotionList
 public class Main{
     public  static void main(String args[])
     {
-
         new TestFrame();
     }
 }
