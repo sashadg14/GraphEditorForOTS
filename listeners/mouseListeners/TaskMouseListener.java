@@ -2,43 +2,44 @@ package com.company.listeners.mouseListeners;
 
 import com.company.Controllers.Controller;
 import com.company.TestFrame;
-import com.company.elementsOfGraph.Edge;
+import com.company.elementsOfGraph.Node;
 
-import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 /**
- * Created by alex on 15.03.2017.
+ * Created by alex o n 16.03.2017.
  */
-public class IdtfEditButtonListener implements MouseListener {
+public class TaskMouseListener implements MouseListener {
     TestFrame testFrame;
     Controller controller;
-    public IdtfEditButtonListener(TestFrame testFrame, Controller controller)
+    public TaskMouseListener(TestFrame testFrame, Controller controller)
     {
         this.testFrame=testFrame;
         this.controller=controller;
     }
-
     public void mouseClicked(MouseEvent e) {
-           if(e.getButton()==1)
-        {   controller.ifActivateNode(e.getX(),e.getY());
-            if(controller.haveActiveNode())
-            controller.setIdtfForActiveNode(JOptionPane.showInputDialog ("Введите идентификатор"));
-            if(controller.haveActiveEdge())
-            controller.setWeigth(JOptionPane.showInputDialog ("Введите вес для дуги"));
-            testFrame.renderAllElements();
-
+        {
+            for(Node node:testFrame.getGraph().getNodeList())
+            {
+                if(node.isEntered())
+                    controller.addNodeForConnection(node);
+            }
         }
+        testFrame.renderAllElements();
     }
 
     @Override
     public void mousePressed(MouseEvent mouseEvent) {
+
     }
 
     @Override
     public void mouseReleased(MouseEvent mouseEvent) {
+        if(controller.isHaveMovingNode())
+            controller.deleteMovingNode();
     }
+
     @Override
     public void mouseEntered(MouseEvent mouseEvent) {
 

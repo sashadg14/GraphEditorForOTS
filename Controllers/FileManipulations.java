@@ -21,7 +21,7 @@ public class FileManipulations {
     }
 
     void SaveGraph(Graph graph) {
-        String fileName = null;
+        String fileName ="";
         JFileChooser jf = new JFileChooser();
         int result = jf.showSaveDialog(null);
         if (result == JFileChooser.APPROVE_OPTION) {
@@ -106,7 +106,6 @@ public class FileManipulations {
                     graph.createEdgeBehindTwoNodeWithId(Integer.parseInt(masOfPiese[3]),Integer.parseInt(masOfPiese[5]));
                      }
             }
-
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();

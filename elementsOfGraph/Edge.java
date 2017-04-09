@@ -14,6 +14,7 @@ public class Edge {
     private Color color;
     private boolean isActive=false;
     private String weigth="";
+    private boolean visited=false;
     public Edge(Node node1,Node node2)
     {   this.firstNode =node1;
         this.secondNode =node2;
@@ -22,6 +23,18 @@ public class Edge {
 
     public boolean isActive() {
         return isActive;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
+    }
+
+    public boolean isVisited() {
+        return visited;
     }
 
     public void setActive(boolean active) {
@@ -54,13 +67,28 @@ public class Edge {
 
     public void render(Graphics2D graphics2D)
     {
-        graphics2D.setColor(color);
+        graphics2D.setColor(Color.gray);
+        if(isActive()){
+            graphics2D.setColor(Color.orange);
+        }
+        if(isVisited()){
+            graphics2D.setColor(Color.cyan);
+        }
+        if(Color.blue==color)
+            graphics2D.setColor(Color.blue);
         graphics2D.setStroke(new BasicStroke(10));
-        graphics2D.drawLine(firstNode.getCenterX()+15, firstNode.getCenterY()+15, secondNode.getCenterX()+15, secondNode.getCenterY()+15);
+        if (getFirstNode()!=getSecondNode())
+            graphics2D.drawLine(getFirstNode().getCenterX() + 15, getFirstNode().getCenterY() + 15, getSecondNode().getCenterX() + 15, getSecondNode().getCenterY() + 15);
+        else {
+            graphics2D.fillOval(getFirstNode().getCenterX() + 10, getFirstNode().getCenterY() - 15, 60, 60);
+            graphics2D.setColor(Color.WHITE);
+            graphics2D.fillOval(getFirstNode().getCenterX() + 20, getFirstNode().getCenterY() - 5, 40, 40);
+        }
+
         graphics2D.setColor(Color.blue);
-        graphics2D.setFont( new Font("TimesRoman", Font.ITALIC+Font.BOLD,   20));
-        graphics2D.drawString(weigth, (firstNode.getCenterX()+30+secondNode.getCenterX()+30)/2,
-                (firstNode.getCenterY()+30+secondNode.getCenterY()+30)/2);
+        graphics2D.setFont(new Font("TimesRoman", Font.ITALIC + Font.BOLD, 20));
+        graphics2D.drawString(getWeigth(), (getFirstNode().getCenterX() + 30 + getSecondNode().getCenterX() + 30) / 2,
+                (getFirstNode().getCenterY() + 30 + getSecondNode().getCenterY() + 30) / 2);
 
         //  graphics2D.fillPolygon(new int [] {firstNodePositionX, firstNodePositionX-10, secondNodePositionX,secondNodePositionX+10},
       //          new int [] {firstNodePositionY, firstNodePositionY+10, secondNodePositionY,secondNodePositionY-10}, 4);

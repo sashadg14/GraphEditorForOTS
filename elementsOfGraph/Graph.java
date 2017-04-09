@@ -44,8 +44,23 @@ public class Graph {
     public void setEdgeList(List<Edge> edgeList) {
         this.edgeList = edgeList;
     }
-
     public void renderAllElements()
+    {
+      /*  testFrame.getGraphics2D().setColor(Color.WHITE);
+        testFrame.getGraphics2D().fillRect(0,0,testFrame.getImag().getWidth(),testFrame.getImag().getHeight());
+        for (Edge edge:edgeList)
+        {
+            edge.render(testFrame.getGraphics2D());
+        }
+
+        for (Node node: nodeList){
+            node.render(testFrame.getGraphics2D());
+        }
+        testFrame.getjLabel().updateUI();*/
+
+    }
+
+    public void renderAllElements_part2()
     {
         testFrame.getGraphics2D().setColor(Color.WHITE);
         testFrame.getGraphics2D().fillRect(0,0,testFrame.getImag().getWidth(),testFrame.getImag().getHeight());

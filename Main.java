@@ -1,8 +1,6 @@
 package com.company;
 import javax.swing.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.awt.*;
 import java.util.Properties;
@@ -12,8 +10,15 @@ import static com.sun.java.accessibility.util.AWTEventMonitor.addMouseMotionList
 
 public class Main{
     public  static void main(String args[])
-    {
-        new TestFrame();
+    {        final TestFrame testFrame = new TestFrame();
+        Timer timer= new Timer( 30 , new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent)
+            {
+                testFrame.rend();
+            }
+        });
+        timer.start();
     }
 }
 

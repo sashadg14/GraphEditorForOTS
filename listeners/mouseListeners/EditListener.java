@@ -23,8 +23,6 @@ import java.awt.event.MouseListener;
             this.controller=controller;
         }
 
-
-
     public void mouseClicked(MouseEvent e) {
                 if(e.getButton()==1)
                 {
